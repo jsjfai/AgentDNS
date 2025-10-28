@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: agentdns-env
+  namespace: agentdns
+data:
+  API_KEY1: "ApiKey123456"
+  API_KEY2: "ApiKey234567"
+  DB_NAME: "category_db"
+  DB_USER: "postgres"
+  DB_PASSWORD: "password"
+  DB_HOST: "192.168.201.180"
+  DB_PORT: "30432"
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: agentdns
+  namespace: agentdns
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: agentdns
+  template:
+    metadata:
+      labels:
+        app: agentdns
+    spec:
+      containers:
+      - name: agentdns
+        image: registry.cn-jssz1.ctyun.cn/aidev/agentdns:v0.0.12
+        envFrom:
+        - configMapRef:
+            name: agentdns-env
+        env:
+        - name: API_KEYS
+          value: "$(API_KEY1),$(API_KEY2)"
+        ports:
+        - containerPort: 8000
+        - containerPort: 8080
+      imagePullSecrets:
+      - name: agentdns-auth
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: agentdns-service
+  namespace: agentdns
+spec:
+  selector:
+    app: agentdns
+  ports:
+    - name: sse-8000
+      protocol: TCP
+      port: 8000
+      targetPort: 8000
+      nodePort: 30800
+    - name: rest-8080
+      protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30801
+  type: NodePort

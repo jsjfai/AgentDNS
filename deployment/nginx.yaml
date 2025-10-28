@@ -1,0 +1,152 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-proxy-config
+  namespace: default
+data:
+  default.conf: |
+    server {
+        listen 80;
+        server_name main.aiagentdns.net;
+
+        location / {
+            # 转发到目标 HTTP 服务器
+            proxy_http_version 1.1;
+            proxy_pass http://agentdns-service.agentdns.svc.cluster.local:8000;  # 替换为后端服务器地址
+            
+            # 代理相关配置
+            #proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            
+            # SSL 验证配置（根据需要调整）
+            proxy_ssl_verify off;  # 生产环境建议开启验证
+            # proxy_ssl_trusted_certificate /path/to/backend_ca.crt;
+            
+            # 其他优化配置
+            proxy_connect_timeout 60s;
+            proxy_send_timeout 60s;
+            proxy_read_timeout 60s;
+        }
+    }
+    server {
+        listen 80;
+        server_name node1.aiagentdns.net;
+
+        location / {
+            # 转发到目标 HTTP 服务器
+            proxy_http_version 1.1;
+            proxy_pass http://agentweb-service.agentweb.svc.cluster.local:3000;  # 替换为后端服务器地址
+            
+            # 代理相关配置
+            #proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            
+            # SSL 验证配置（根据需要调整）
+            proxy_ssl_verify off;  # 生产环境建议开启验证
+            # proxy_ssl_trusted_certificate /path/to/backend_ca.crt;
+            
+            # 其他优化配置
+            proxy_connect_timeout 60s;
+            proxy_send_timeout 60s;
+            proxy_read_timeout 60s;
+        }
+    }
+    server {
+        listen 80;
+        server_name node2.aiagentdns.net;
+
+        location / {
+            # 转发到目标 HTTP 服务器
+            proxy_http_version 1.1;
+            proxy_pass http://secondweb-service.secondweb.svc.cluster.local:3000;  # 替换为后端服务器地址
+            
+            # 代理相关配置
+            #proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            
+            # SSL 验证配置（根据需要调整）
+            proxy_ssl_verify off;  # 生产环境建议开启验证
+            # proxy_ssl_trusted_certificate /path/to/backend_ca.crt;
+            
+            # 其他优化配置
+            proxy_connect_timeout 60s;
+            proxy_send_timeout 60s;
+            proxy_read_timeout 60s;
+        }
+    }
+    server {
+        listen 80;
+        server_name node3.aiagentdns.net;
+
+        location / {
+            # 转发到目标 HTTP 服务器
+            proxy_http_version 1.1;
+            proxy_pass http://thirdweb-service.thirdweb.svc.cluster.local:3000;  # 替换为后端服务器地址
+            
+            # 代理相关配置
+            #proxy_set_header Host $host;
+            proxy_set_header X-Real-IP $remote_addr;
+            proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+            proxy_set_header X-Forwarded-Proto $scheme;
+            
+            # SSL 验证配置（根据需要调整）
+            proxy_ssl_verify off;  # 生产环境建议开启验证
+            # proxy_ssl_trusted_certificate /path/to/backend_ca.crt;
+            
+            # 其他优化配置
+            proxy_connect_timeout 60s;
+            proxy_send_timeout 60s;
+            proxy_read_timeout 60s;
+        }
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-proxy
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: nginx-proxy
+  template:
+    metadata:
+      labels:
+        app: nginx-proxy
+    spec:
+      containers:
+      - name: nginx
+        image: docker.1ms.run/library/nginx:latest
+        ports:
+        - containerPort: 80
+        volumeMounts:
+        - name: nginx-config
+          mountPath: /etc/nginx/conf.d/default.conf
+          subPath: default.conf
+      volumes:
+      - name: nginx-config
+        configMap:
+          name: nginx-proxy-config
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: nginx-proxy-service
+  namespace: default
+spec:
+  selector:
+    app: nginx-proxy
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 80
+    nodePort: 30900
+  type: NodePort  # 可根据需求改为LoadBalancer或ClusterIP
