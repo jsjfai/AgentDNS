@@ -6,7 +6,7 @@
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-**AgentDNS** is the core component of [AgentWeb](https://github.com/jsjfai/agentweb/blob/main/README.md) that facilitates agent registration and discovery, enabling large language models (LLMs) to browse the internet freely, just like humans.
+**AgentDNS** is the core component of [Agentweb](https://github.com/jsjfai/agentweb/blob/main/README.md) that facilitates agent registration and discovery, enabling large language models (LLMs) to browse the internet freely, just like humans.
 
 ---
 
