@@ -1,3 +1,6 @@
+<p align='center'>
+<img src='./resources/icon.png' width="150" height="150" alt="AgentDNS Icon" />
+</p>
 # AgentDNS
 
 [![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
