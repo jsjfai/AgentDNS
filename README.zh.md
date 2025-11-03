@@ -99,9 +99,9 @@ https://github.com/jsjfai/AgentDNS-client
 ---
 
 ## 📚 文档
-- [完整 API 参考](https://docs.agentdns.jsjf.ai)
-- [Agent 集成指南](https://docs.agentdns.jsjf.ai/guides/integration)
-- [LLM 编排模式](https://docs.agentdns.jsjf.ai/guides/llm-orchestration)
+- [完整API参考](https://docs.agentdns.jsjf.ai)
+- [Agent集成指南](https://docs.agentdns.jsjf.ai/guides/integration)
+- [LLM编排模式](https://docs.agentdns.jsjf.ai/guides/llm-orchestration)
 
 ---
 
