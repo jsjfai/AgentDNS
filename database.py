@@ -8,9 +8,9 @@ from log import logger
 DB_CONFIG = {
     "dbname": os.getenv("DB_NAME", "category_db"),
     "user": os.getenv("DB_USER", "postgres"),
-    "password": os.getenv("DB_PASSWORD", "password"),
-    "host": os.getenv("DB_HOST", "192.168.201.180"),
-    "port": os.getenv("DB_PORT", "30432")
+    "password": os.getenv("DB_PASSWORD", ""),
+    "host": os.getenv("DB_HOST", "localhost"),
+    "port": os.getenv("DB_PORT", "5432")
 }
 
 # 初始化数据库连接
