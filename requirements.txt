@@ -1,0 +1,5 @@
+mcp>=1.0.0
+psycopg2-binary>=2.9.0
+fastapi>=0.100.0
+aiohttp>=3.8.0
+uvicorn>=0.22.0
