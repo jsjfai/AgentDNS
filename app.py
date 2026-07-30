@@ -324,8 +324,12 @@ async def proxy_handler(request):
             content_type="application/json"
         )
 
+async def health(request):
+    return web.json_response({"status": "ok"})
+
 def setup_routes(app):
     # 配置 RESTful API 路由
+    app.router.add_get("/health", health)
     app.router.add_get("/metrics", get_metrics)
     for path in PROXY_PATHS:
         app.router.add_route("*", path, proxy_handler)
