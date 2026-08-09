@@ -4,11 +4,11 @@ metadata:
   name: agentdns-env
   namespace: agentdns
 data:
-  API_KEY1: "ApiKey123456"
-  API_KEY2: "ApiKey234567"
+  API_KEY1: "CHANGE_ME_API_KEY_1"
+  API_KEY2: "CHANGE_ME_API_KEY_2"
   DB_NAME: "category_db"
-  DB_USER: "postgres"
-  DB_PASSWORD: "password"
+  DB_USER: "agentdns_user"
+  DB_PASSWORD: "CHANGE_ME_DB_PASSWORD"
   DB_HOST: "192.168.201.180"
   DB_PORT: "30432"
 ---
