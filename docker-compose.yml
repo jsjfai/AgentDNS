@@ -1,0 +1,31 @@
+version: "3.8"
+
+services:
+  db:
+    image: postgres:16
+    environment:
+      POSTGRES_DB: category_db
+      POSTGRES_USER: agentdns_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-dev_password}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  agentdns:
+    build: .
+    ports:
+      - "8000:8000"
+      - "8080:8080"
+    environment:
+      DB_NAME: category_db
+      DB_USER: agentdns_user
+      DB_PASSWORD: ${DB_PASSWORD:-dev_password}
+      DB_HOST: db
+      DB_PORT: "5432"
+      API_KEYS: ${API_KEYS:-dev_key_1,dev_key_2}
+    depends_on:
+      - db
+
+volumes:
+  pgdata:
